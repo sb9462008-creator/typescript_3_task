@@ -27,7 +27,8 @@ export async function registerAction(
     await insertRegistration({ player_name, email, game });
     revalidatePath("/dashboard");
     return { success: true, message: `${player_name} амжилттай бүртгэгдлээ! 🎮` };
-  } catch {
-    return { success: false, message: "Серверийн алдаа. Дахин оролдоно уу." };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return { success: false, message: `Алдаа: ${msg}` };
   }
 }
