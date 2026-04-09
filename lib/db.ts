@@ -1,9 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 export type Registration = {
   id: number;
@@ -16,12 +18,12 @@ export type Registration = {
 export async function insertRegistration(
   data: Omit<Registration, "id" | "created_at">
 ) {
-  const { error } = await supabase.from("registrations").insert(data);
+  const { error } = await getClient().from("registrations").insert(data);
   if (error) throw new Error(error.message);
 }
 
 export async function getAllRegistrations(): Promise<Registration[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getClient()
     .from("registrations")
     .select("*")
     .order("created_at", { ascending: false });

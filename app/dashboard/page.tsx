@@ -11,7 +11,12 @@ const GAME_COLORS: Record<string, string> = {
 };
 
 export default async function DashboardPage() {
-  const registrations = await getAllRegistrations();
+  let registrations: Awaited<ReturnType<typeof getAllRegistrations>> = [];
+  try {
+    registrations = await getAllRegistrations();
+  } catch {
+    // DB холболт байхгүй үед хоосон харуулна
+  }
 
   const gameCounts = registrations.reduce<Record<string, number>>((acc, r) => {
     acc[r.game] = (acc[r.game] ?? 0) + 1;
