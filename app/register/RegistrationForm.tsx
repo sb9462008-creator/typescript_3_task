@@ -3,11 +3,13 @@
 import { useActionState, useOptimistic, useState } from "react";
 import { registerAction, FormState } from "@/lib/actions";
 
-const GAMES = ["CS2","Dota2","Valorant", "Mobile Legends", "PUBG Mobile", "Free Fire", "EA FC 25","Standoff2","LOL","Clash Of Royal"];
+const GAMES = ["Valorant", "Mobile Legends", "PUBG Mobile", "Free Fire", "EA FC 25"];
+const MAX_RETRY = 3;
 
 type OptimisticEntry = { player_name: string; game: string; pending: boolean };
 
 export default function RegistrationForm() {
+  // Task 3: useActionState — server action-ий state удирдана
   const [state, formAction, isPending] = useActionState<FormState, FormData>(
     registerAction,
     { success: false, message: "" }
@@ -18,17 +20,24 @@ export default function RegistrationForm() {
     (prev, entry) => [entry, ...prev]
   );
 
-  const [submitted, setSubmitted] = useState<OptimisticEntry[]>([]);
+  const [retryCount, setRetryCount] = useState(0);
+  const [lastFormData, setLastFormData] = useState<FormData | null>(null);
 
   async function handleSubmit(formData: FormData) {
     const player_name = formData.get("player_name")?.toString() ?? "";
     const game = formData.get("game")?.toString() ?? "";
-    // Optimistic: instantly show in list before server responds
+
     addOptimistic({ player_name, game, pending: true });
+    setLastFormData(formData);
+    setRetryCount(0);
+
     await formAction(formData);
-    if (player_name && game) {
-      setSubmitted((prev) => [{ player_name, game, pending: false }, ...prev]);
-    }
+  }
+
+  async function handleRetry() {
+    if (!lastFormData || retryCount >= MAX_RETRY) return;
+    setRetryCount((c) => c + 1);
+    await formAction(lastFormData);
   }
 
   return (
@@ -38,7 +47,7 @@ export default function RegistrationForm() {
           E-Sport Tournament
         </h1>
         <p className="text-center text-gray-400 mb-8 text-sm">
-          Indra Cyber School — burtgel
+          Indra Cyber School — Burtgel
         </p>
 
         <form action={handleSubmit} className="bg-gray-900 rounded-2xl p-6 space-y-4 shadow-xl">
@@ -52,7 +61,7 @@ export default function RegistrationForm() {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-300 mb-1">email</label>
+            <label className="block text-sm text-gray-300 mb-1">Email</label>
             <input
               name="email"
               type="email"
@@ -68,7 +77,7 @@ export default function RegistrationForm() {
               required
               className="w-full bg-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
-              <option value="">— songono uu —</option>
+              <option value="">— Songono uu —</option>
               {GAMES.map((g) => (
                 <option key={g} value={g}>{g}</option>
               ))}
@@ -80,10 +89,9 @@ export default function RegistrationForm() {
             disabled={isPending}
             className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg py-2 font-semibold transition-colors"
           >
-            {isPending ? "burtgej baina..." : "burtguuleh"}
+            {isPending ? "Бүртгэж байна..." : "Бүртгүүлэх"}
           </button>
 
-          {/* Feedback toast */}
           {state.message && (
             <div
               className={`rounded-lg px-4 py-2 text-sm text-center font-medium ${
@@ -93,15 +101,29 @@ export default function RegistrationForm() {
               }`}
             >
               {state.message}
+
+              {!state.success && lastFormData && retryCount < MAX_RETRY && (
+                <button
+                  type="button"
+                  onClick={handleRetry}
+                  className="ml-3 underline text-yellow-400 hover:text-yellow-300"
+                >
+                  Dahin oroldoh ({MAX_RETRY - retryCount} udaa uldsen)
+                </button>
+              )}
+              {!state.success && retryCount >= MAX_RETRY && (
+                <p className="text-xs text-gray-400 mt-1">
+                  Servert holbogdoj chadsangui. Daraa dahin oroldono uu.
+                </p>
+              )}
             </div>
           )}
         </form>
 
-        {/* Optimistic list — instant feedback */}
         {optimisticList.length > 0 && (
           <div className="mt-8">
-            <h2 className="text-sm text-gray-400 mb-3 uppercase tracking-wider">
-              tani burtgel (optimistic preview)
+            <h2 className="text-xs text-gray-500 uppercase tracking-wider mb-3">
+              Tanii burtgel — Optimistic preview
             </h2>
             <ul className="space-y-2">
               {optimisticList.map((entry, i) => (
