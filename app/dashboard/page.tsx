@@ -1,14 +1,24 @@
 import { getAllRegistrations } from "@/lib/db";
-
+import { unstable_cache } from "next/cache";
 export const dynamic = "force-dynamic";
+const getCachedGameCounts = unstable_cache(
+  async () => {
+    const regs = await getAllRegistrations();
+    return regs.reduce<Record<string, number>>((acc, r) => {
+      acc[r.game] = (acc[r.game] ?? 0) + 1;
+      return acc;
+    }, {});
+  },
+  ["game-counts"],
+  { revalidate: 60 }
+);
 
 const GAME_COLORS: Record<string, string> = {
-  "Dota2": "bg-red-300 text-red-900",
-  "Valorant": "bg-red-900 text-red-300",
+  Valorant: "bg-red-900 text-red-300",
   "Mobile Legends": "bg-blue-900 text-blue-300",
   "PUBG Mobile": "bg-yellow-900 text-yellow-300",
   "Free Fire": "bg-orange-900 text-orange-300",
-  "EA FC 25": "bg-green-900 text-green-300"
+  "EA FC 25": "bg-green-900 text-green-300",
 };
 
 export default async function DashboardPage() {
@@ -17,24 +27,36 @@ export default async function DashboardPage() {
     registrations = await getAllRegistrations();
   } catch {}
 
-  const gameCounts = registrations.reduce<Record<string, number>>((acc, r) => {
-    acc[r.game] = (acc[r.game] ?? 0) + 1;
-    return acc;
-  }, {});
+  let gameCounts: Record<string, number> = {};
+  try {
+    gameCounts = await getCachedGameCounts();
+  } catch {}
 
   return (
     <div className="min-h-screen bg-gray-950 text-white py-12 px-4">
       <div className="max-w-3xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-2">
           <div>
             <h1 className="text-3xl font-bold text-purple-400">Admin Dashboard</h1>
-            <p className="text-gray-400 text-sm mt-1">SSR — live data, no cache hiisen</p>
+            <p className="text-gray-400 text-sm mt-1">
+              SSR — live data &nbsp;|&nbsp;
+              <span className="text-yellow-500">Leaderboard: 60s cache</span>
+            </p>
           </div>
           <span className="bg-purple-900 text-purple-300 rounded-full px-4 py-1 text-sm font-semibold">
-            {registrations.length} burtgel
+            {registrations.length} бүртгэл
           </span>
         </div>
 
+        <div className="bg-gray-900 border border-gray-700 rounded-xl p-4 mb-6 text-xs text-gray-400 space-y-1">
+          <p><span className="text-white font-medium">Server-first SSR:</span> Dashboard n client JS ashiglahgui — huudas neehed server DB-s ogogdol tataj HTML bolgon ilgeene → hurdan TTI</p>
+          <p><span className="text-white font-medium">Optimistic UX:</span> burtgel submit hiihed server hariu huleehguigeer shuud UI update hiine → hereglegch itgeltei bolno → conversion conversation nemegdene</p>
+          <p><span className="text-white font-medium">Cache:</span> Leaderboard 60s cache-tei → DB duudlaga bagasna → server cost buurna</p>
+        </div>
+
+        <h2 className="text-xs text-gray-500 uppercase tracking-wider mb-3">
+          Leaderboard (60s cache)
+        </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
           {Object.entries(gameCounts).map(([game, count]) => (
             <div key={game} className="bg-gray-900 rounded-xl p-4 text-center">
@@ -44,8 +66,11 @@ export default async function DashboardPage() {
           ))}
         </div>
 
+        <h2 className="text-xs text-gray-500 uppercase tracking-wider mb-3">
+          Live burtgeluud (SSR)
+        </h2>
         {registrations.length === 0 ? (
-          <p className="text-center text-gray-500 py-16">burtgel baihgui baina.</p>
+          <p className="text-center text-gray-500 py-16">Burtgel baihgui baina.</p>
         ) : (
           <div className="space-y-2">
             {registrations.map((r) => (
@@ -76,7 +101,7 @@ export default async function DashboardPage() {
 
         <p className="text-center text-gray-600 text-xs mt-8">
           <a href="/register" className="hover:text-purple-400 underline">
-            ← Burtgeliin form
+             Burtgeliin form
           </a>
         </p>
       </div>
