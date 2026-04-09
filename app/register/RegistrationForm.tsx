@@ -3,7 +3,7 @@
 import { useActionState, useOptimistic, useState } from "react";
 import { registerAction, FormState } from "@/lib/actions";
 
-const GAMES = ["Valorant", "Mobile Legends", "PUBG Mobile", "Free Fire", "EA FC 25"];
+const GAMES = ["CS2","Dota2","Valorant", "Mobile Legends", "PUBG Mobile", "Free Fire", "EA FC 25","Standoff2","LOL","Clash Of Royal"];
 
 type OptimisticEntry = { player_name: string; game: string; pending: boolean };
 
