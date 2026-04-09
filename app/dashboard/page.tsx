@@ -3,11 +3,12 @@ import { getAllRegistrations } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 const GAME_COLORS: Record<string, string> = {
-  Valorant: "bg-red-900 text-red-300",
+  "Dota2": "bg-black-900 text-red-900",
+  "Valorant": "bg-red-900 text-red-300",
   "Mobile Legends": "bg-blue-900 text-blue-300",
   "PUBG Mobile": "bg-yellow-900 text-yellow-300",
   "Free Fire": "bg-orange-900 text-orange-300",
-  "EA FC 25": "bg-green-900 text-green-300",
+  "EA FC 25": "bg-green-900 text-green-300"
 };
 
 export default async function DashboardPage() {
