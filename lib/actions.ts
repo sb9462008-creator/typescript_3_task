@@ -17,18 +17,18 @@ export async function registerAction(
   const game = formData.get("game")?.toString().trim() ?? "";
 
   if (!player_name || !email || !game) {
-    return { success: false, message: "Бүх талбарыг бөглөнө үү." };
+    return { success: false, message: "buh talbariig boglono uu." };
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { success: false, message: "И-мэйл буруу байна." };
+    return { success: false, message: "email buruu baina." };
   }
 
   try {
     await insertRegistration({ player_name, email, game });
     revalidatePath("/dashboard");
-    return { success: true, message: `${player_name} амжилттай бүртгэгдлээ! 🎮` };
+    return { success: true, message: `${player_name} amjilttai burtgelee` };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    return { success: false, message: `Алдаа: ${msg}` };
+    return { success: false, message: `aldaa: ${msg}` };
   }
 }
