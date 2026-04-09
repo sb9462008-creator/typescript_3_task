@@ -3,7 +3,7 @@ import { getAllRegistrations } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 const GAME_COLORS: Record<string, string> = {
-  "Dota2": "bg-black-900 text-red-900",
+  "Dota2": "bg-red-300 text-red-900",
   "Valorant": "bg-red-900 text-red-300",
   "Mobile Legends": "bg-blue-900 text-blue-300",
   "PUBG Mobile": "bg-yellow-900 text-yellow-300",
