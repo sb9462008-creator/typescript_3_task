@@ -1,10 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 
 function getClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) {
+    throw new Error(`ENV missing: url=${url} key=${key ? "ok" : "missing"}`);
+  }
+  return createClient(url, key);
 }
 
 export type Registration = {
