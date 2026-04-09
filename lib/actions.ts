@@ -17,18 +17,18 @@ export async function registerAction(
   const game = formData.get("game")?.toString().trim() ?? "";
 
   if (!player_name || !email || !game) {
-    return { success: false, message: "buh talbariig boglono uu." };
+    return { success: false, message: "Buh talbariig boglono uu." };
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { success: false, message: "email buruu baina." };
+    return { success: false, message: "Email buruu baina." };
   }
 
   try {
     await insertRegistration({ player_name, email, game });
     revalidatePath("/dashboard");
-    return { success: true, message: `${player_name} amjilttai burtgelee` };
+    return { success: true, message: `${player_name} Amjilttai burtgelee!` };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    return { success: false, message: `aldaa: ${msg}` };
+    return { success: false, message: `Aldaa: ${msg}` };
   }
 }
