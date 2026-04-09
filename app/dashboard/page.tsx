@@ -29,10 +29,10 @@ export default async function DashboardPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-purple-400">Admin Dashboard</h1>
-            <p className="text-gray-400 text-sm mt-1">SSR — live data, no cache</p>
+            <p className="text-gray-400 text-sm mt-1">SSR — live data, no cache hiisen</p>
           </div>
           <span className="bg-purple-900 text-purple-300 rounded-full px-4 py-1 text-sm font-semibold">
-            {registrations.length} бүртгэл
+            {registrations.length} burtgel
           </span>
         </div>
 
@@ -46,7 +46,7 @@ export default async function DashboardPage() {
         </div>
 
         {registrations.length === 0 ? (
-          <p className="text-center text-gray-500 py-16">Бүртгэл байхгүй байна.</p>
+          <p className="text-center text-gray-500 py-16">burtgel baihgui baina.</p>
         ) : (
           <div className="space-y-2">
             {registrations.map((r) => (
@@ -77,7 +77,7 @@ export default async function DashboardPage() {
 
         <p className="text-center text-gray-600 text-xs mt-8">
           <a href="/register" className="hover:text-purple-400 underline">
-            ← Бүртгэлийн форм
+            ← Burtgeliin form
           </a>
         </p>
       </div>
