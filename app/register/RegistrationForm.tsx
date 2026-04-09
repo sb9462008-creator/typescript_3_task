@@ -35,15 +35,15 @@ export default function RegistrationForm() {
     <div className="min-h-screen bg-gray-950 text-white flex flex-col items-center py-12 px-4">
       <div className="w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-2 text-purple-400">
-          🎮 E-Sport Tournament
+          E-Sport Tournament
         </h1>
         <p className="text-center text-gray-400 mb-8 text-sm">
-          Indra Cyber School — Бүртгэл
+          Indra Cyber School — burtgel
         </p>
 
         <form action={handleSubmit} className="bg-gray-900 rounded-2xl p-6 space-y-4 shadow-xl">
           <div>
-            <label className="block text-sm text-gray-300 mb-1">Тоглогчийн нэр</label>
+            <label className="block text-sm text-gray-300 mb-1">Toglogchiin ner</label>
             <input
               name="player_name"
               required
@@ -52,7 +52,7 @@ export default function RegistrationForm() {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-300 mb-1">И-мэйл</label>
+            <label className="block text-sm text-gray-300 mb-1">email</label>
             <input
               name="email"
               type="email"
@@ -62,13 +62,13 @@ export default function RegistrationForm() {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-300 mb-1">Тоглоом</label>
+            <label className="block text-sm text-gray-300 mb-1">togloom</label>
             <select
               name="game"
               required
               className="w-full bg-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
-              <option value="">— Сонгоно уу —</option>
+              <option value="">— songono uu —</option>
               {GAMES.map((g) => (
                 <option key={g} value={g}>{g}</option>
               ))}
@@ -80,7 +80,7 @@ export default function RegistrationForm() {
             disabled={isPending}
             className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg py-2 font-semibold transition-colors"
           >
-            {isPending ? "Бүртгэж байна..." : "Бүртгүүлэх"}
+            {isPending ? "burtgej baina..." : "burtguuleh"}
           </button>
 
           {/* Feedback toast */}
@@ -101,7 +101,7 @@ export default function RegistrationForm() {
         {optimisticList.length > 0 && (
           <div className="mt-8">
             <h2 className="text-sm text-gray-400 mb-3 uppercase tracking-wider">
-              Таны бүртгэл (optimistic preview)
+              tani burtgel (optimistic preview)
             </h2>
             <ul className="space-y-2">
               {optimisticList.map((entry, i) => (
